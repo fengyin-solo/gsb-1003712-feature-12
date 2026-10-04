@@ -1,9 +1,13 @@
 import { MODULE_BY_KEY } from '@/data/modules'
 import { allRows, listRows, resetRows, saveRows } from '@/data/local-store'
+import type { Identity } from '@/data/stations'
 import type { ActionResult, EntryRow, ModuleMeta, OverviewResult, PageResult } from '@/data/types'
 
 // 会写进数据的「往回走」动作：命中就把这条记录标成异常态，看板上能一眼看出来。
 const NEGATIVE_ACTIONS = ['撤销', '作废', '拒绝', '驳回', '停用', '忽略', '下线', '回滚']
+
+// 站房维护页的跨站资料只读：任何状态流转都不能落到别站的维护单上。
+const OWNED_MODULES = new Set(['stationhouse'])
 
 export function moduleMeta(key: string): ModuleMeta {
   const meta = MODULE_BY_KEY.get(key)
@@ -28,7 +32,7 @@ export function listEntries(key: string, filters: Record<string, string> = {}): 
   return { items: matched, total: matched.length, page: 1, size: matched.length }
 }
 
-export function runAction(key: string, id: number, action: string): ActionResult {
+export function runAction(key: string, id: number, action: string, identity?: Identity): ActionResult {
   const meta = moduleMeta(key)
   const target = meta.actionTargets[action]
   if (!target) {
@@ -38,6 +42,12 @@ export function runAction(key: string, id: number, action: string): ActionResult
   const index = rows.findIndex((row) => Number(row.id) === id)
   if (index < 0) {
     return { ok: false, message: `没有找到编号为 ${id} 的${meta.entity}` }
+  }
+  if (identity && OWNED_MODULES.has(key)) {
+    const owner = String(rows[index]['归属站房'] ?? '')
+    if (owner && owner !== identity.stationCode) {
+      return { ok: false, message: '跨站资料按只读共享，不能改动其他站房的记录' }
+    }
   }
   const current = String(rows[index].status)
   if (current === target) {
