@@ -35,3 +35,15 @@ body { margin: 0; background: #f6f8fb; color: #1f2937; }
 .error-text { color: #b42318; }
 .status-legend { display: flex; flex-wrap: wrap; gap: 12px; margin: 0 0 10px; font-size: 12px; color: var(--muted); }
 .legend-item { background: #eef2f7; border-radius: 999px; padding: 2px 10px; }
+.role-switch { display: inline-flex; gap: 6px; }
+.scope-line { margin: 0 0 10px; font-size: 12px; color: var(--muted); }
+.reading-panel { background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; margin-bottom: 12px; }
+.reading-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+.reading-meta { font-size: 12px; color: var(--muted); }
+.reading-grid { display: flex; gap: 12px; margin: 10px 0; }
+.reading-card { flex: 1; background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; }
+.reading-conclusion { margin: 0 0 10px; font-size: 13px; color: #175cd3; }
+.reading-actions { display: flex; gap: 8px; align-items: center; }
+.readonly-tag { font-size: 12px; color: var(--muted); background: #eef2f7; border-radius: 999px; padding: 2px 10px; }
+.row-selected td { background: #eff6ff; }
+.notice-text { color: #067647; }
